@@ -15,7 +15,6 @@ MonoBehaviour:
   dialogues:
   - lines:
     - Hola soy la Wachi
-    - Como estas
     question:
       text: SAY MY NAME
       anwers:
@@ -23,3 +22,13 @@ MonoBehaviour:
       - Graciela
       - Hitoshi
       correctAnswerIndex: 0
+  - lines:
+    - Me gusta el anime
+    - Algunos dicen que soy otaca
+    question:
+      text: "\xBFQu\xE9 opinas?"
+      anwers:
+      - Es delicioso
+      - Yo tambien soy animada
+      - No me gusta pero cada quien su gusto
+      correctAnswerIndex: 2

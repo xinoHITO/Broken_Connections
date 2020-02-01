@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: d1c3109bdb54ad54c8a2b2838528e640
+    path: Assets/_Game Jam 2020/gameplay.unity
+    guid: 9e16b57b5b9d26a49a0507419c38639e
+  - enabled: 1
+    path: Assets/_Game Jam 2020/lose.unity
+    guid: f412515dd45799e4c9169ed946dcd30b
   m_configObjects: {}

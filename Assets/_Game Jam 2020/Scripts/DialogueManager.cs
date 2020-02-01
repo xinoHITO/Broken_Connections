@@ -42,8 +42,8 @@ public class DialogueManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(SpeakRate);
-            
-            string newLetter = "" + Dialogue.dialogues[0].lines[LineIndex][LetterIndex];
+            DialogueData.Dialogue currentDialogue = Dialogue.dialogues[DialogueIndex];
+            string newLetter = "" + currentDialogue.lines[LineIndex][LetterIndex];
             
             if (Distortion.IsDistortionActive && newLetter != " ")
             {
@@ -57,12 +57,12 @@ public class DialogueManager : MonoBehaviour
             }
             LineLabel.text += newLetter;
             LetterIndex++;
-            if (LetterIndex == Dialogue.dialogues[0].lines[LineIndex].Length)
+            if (LetterIndex == currentDialogue.lines[LineIndex].Length)
             {
                 yield return new WaitForSeconds(PauseBetweenLines);
                 
                 LineIndex++;
-                if (LineIndex >= Dialogue.dialogues[0].lines.Length)
+                if (LineIndex >= currentDialogue.lines.Length)
                 {
                     break;
                 }
@@ -70,20 +70,53 @@ public class DialogueManager : MonoBehaviour
                 LetterIndex = 0;
             }
         }
-        StartCoroutine(ShowQuestion());
+        ShowQuestion();
     }
 
-    IEnumerator ShowQuestion() {
+    void ShowQuestion() {
         QuestionBox.SetActive(true);
         LineBox.SetActive(false);
 
-        QuestionLabel.text = Dialogue.dialogues[DialogueIndex].question.text;
+        DialogueData.Question currentQuestion = Dialogue.dialogues[DialogueIndex].question;
+        QuestionLabel.text = currentQuestion.text;
         Text[] answerTexts = AnswerLabelsContainer.GetComponentsInChildren<Text>();
+        Button[] answerButtons = AnswerLabelsContainer.GetComponentsInChildren<Button>();
         for (int i = 0; i < answerTexts.Length; i++)
         {
-            answerTexts[i].text = Dialogue.dialogues[DialogueIndex].question.anwers[i];
+            answerTexts[i].text = currentQuestion.anwers[i];
+            answerButtons[i].onClick.RemoveAllListeners();
+            if (i != currentQuestion.correctAnswerIndex)
+            {
+                answerButtons[i].onClick.AddListener(() => OnClickWrongAnswer());
+            }
+            else {
+                answerButtons[i].onClick.AddListener(() => OnClickCorrectAnswer());
+            }
+            
         }
+    }
+
+    private void OnClickWrongAnswer() {
+        Debug.Log("INCORRECT");
+        EndQuestion();
+    }
+
+    private void OnClickCorrectAnswer() {
+        Debug.Log("CORRECT");
+        EndQuestion();
+    }
+
+    private void EndQuestion() {
+
+        QuestionBox.SetActive(false);
+        LineBox.SetActive(true);      
         DialogueIndex++;
-        yield return null;
+        if (DialogueIndex >= Dialogue.dialogues.Length)
+        {
+            Debug.Log("ENDED DIALOGUE");
+        }
+        else {
+            StartCoroutine(ShowDialogueLines());
+        }
     }
 }

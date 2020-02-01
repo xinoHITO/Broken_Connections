@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class ReadLipsManager : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class ReadLipsManager : MonoBehaviour
     public float AwkwardMax = 100;
     public float AwkwardGainSpeed = 5;
     public float AwkwardLoseSpeed = 1.5f;
+
+    public UnityEvent OnLose;
 
     private void Update()
     {
@@ -18,5 +21,13 @@ public class ReadLipsManager : MonoBehaviour
         else {
             AwkwardLevel -= Time.deltaTime * AwkwardLoseSpeed;
         }
+        AwkwardLevel = Mathf.Max(0, AwkwardLevel);
+
+        if (AwkwardLevel >= AwkwardMax)
+        {
+            this.enabled = false;
+            OnLose?.Invoke();
+        }
+
     }
 }
