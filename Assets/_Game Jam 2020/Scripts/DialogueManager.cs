@@ -12,6 +12,10 @@ public class DialogueManager : MonoBehaviour
     public GameObject QuestionBox;
     public Text QuestionLabel;
     public RectTransform AnswerLabelsContainer;
+    [Header("Result")]
+    public GameObject ResultBox;
+    public GameObject RightAnswer;
+    public GameObject WrongAnswer;
 
     [Header("Data")]
     public DialogueData Dialogue;
@@ -23,6 +27,8 @@ public class DialogueManager : MonoBehaviour
     private int DialogueIndex;
     private int LineIndex;
     private int LetterIndex;
+
+    private int CorrectAnwersCount;
 
     // Start is called before the first frame update
     void Start()
@@ -98,25 +104,35 @@ public class DialogueManager : MonoBehaviour
 
     private void OnClickWrongAnswer() {
         Debug.Log("INCORRECT");
-        EndQuestion();
+        WrongAnswer.SetActive(true);
+        RightAnswer.SetActive(false);
+        StartCoroutine(EndQuestion());
     }
 
     private void OnClickCorrectAnswer() {
         Debug.Log("CORRECT");
-        EndQuestion();
+        CorrectAnwersCount++;
+        RightAnswer.SetActive(true);
+        WrongAnswer.SetActive(false);
+        StartCoroutine(EndQuestion());
     }
 
-    private void EndQuestion() {
+    private IEnumerator EndQuestion() {
 
         QuestionBox.SetActive(false);
-        LineBox.SetActive(true);      
+        LineBox.SetActive(true);
+        ResultBox.SetActive(true);
         DialogueIndex++;
         if (DialogueIndex >= Dialogue.dialogues.Length)
         {
-            Debug.Log("ENDED DIALOGUE");
+            Debug.Log("ENDED DIALOGUE - YOU GOT "+CorrectAnwersCount+" OUT OF "+Dialogue.dialogues.Length);
         }
         else {
+            yield return new WaitForSeconds(PauseBetweenLines);
+            ResultBox.SetActive(false);
             StartCoroutine(ShowDialogueLines());
         }
+        yield return null;
+
     }
 }

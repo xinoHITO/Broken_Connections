@@ -8,8 +8,9 @@ public class ReadLipsManager : MonoBehaviour
     public float AwkwardMax = 100;
     public float AwkwardGainSpeed = 5;
     public float AwkwardLoseSpeed = 1.5f;
-
-    public UnityEvent OnLose;
+    public UnityEvent OnStartReadingLips;
+    public UnityEvent OnEndReadingLips;
+    public UnityEvent OnAwkwardMax;
 
     private void Update()
     {
@@ -26,8 +27,18 @@ public class ReadLipsManager : MonoBehaviour
         if (AwkwardLevel >= AwkwardMax)
         {
             this.enabled = false;
-            OnLose?.Invoke();
+            OnAwkwardMax?.Invoke();
         }
 
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            OnStartReadingLips?.Invoke();
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            OnEndReadingLips?.Invoke();
+        }
     }
 }
