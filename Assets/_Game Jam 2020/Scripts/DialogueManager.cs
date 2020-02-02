@@ -44,7 +44,11 @@ public class DialogueManager : MonoBehaviour
     public UnityAction OnRightAnswer;
     public UnityAction OnWrongAnswer;
 
-    public UnityEvent OnFinishedDialogue;
+    public UnityAction OnLineFinished;
+    public UnityEvent OnDialogueFinished;
+
+    public delegate void OnAllDialoguesFinished(int correctAnswers, int questionsCount);
+    public OnAllDialoguesFinished onAllDialoguesFinished;
 
     private Button[] answerButtons;
 
@@ -116,7 +120,7 @@ public class DialogueManager : MonoBehaviour
 
                 BlinkingFinishes();
                 textAudioSource.Stop();
-
+                OnLineFinished?.Invoke();
                 yield return new WaitForSeconds(PauseBetweenLines);
 
                 LineIndex++;
@@ -245,18 +249,18 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator EndQuestion()
     {
-
         QuestionBox.SetActive(false);
         LineBox.SetActive(true);
         ResultBox.SetActive(true);
         DialogueIndex++;
+        yield return new WaitForSeconds(PauseBetweenLines);
         if (DialogueIndex >= Dialogue.dialogues.Length)
         {
+            onAllDialoguesFinished?.Invoke(CorrectAnwersCount,Dialogue.dialogues.Length);
             Debug.Log("ENDED DIALOGUE - YOU GOT " + CorrectAnwersCount + " OUT OF " + Dialogue.dialogues.Length);
         }
         else
         {
-            yield return new WaitForSeconds(PauseBetweenLines);
             ResultBox.SetActive(false);
             StartCoroutine(ShowDialogueLines());
         }
