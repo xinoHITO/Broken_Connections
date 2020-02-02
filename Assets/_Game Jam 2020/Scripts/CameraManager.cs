@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,17 +13,25 @@ public class CameraManager : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         readLips = FindObjectOfType<ReadLipsManager>();
-        readLips.OnStartReadingLips.AddListener(OnStartReadingLips);
-        readLips.OnEndReadingLips.AddListener(OnEndReadingLips);
+        readLips.OnStartReadingLips += OnStartReadingLips;
+        readLips.OnEndReadingLips += OnEndReadingLips;
+        readLips.OnAwkwardMax += LoseGame;
     }
 
-    void OnStartReadingLips()
+    private void OnStartReadingLips()
     {
         animator.SetTrigger("Zoom");
     }
 
-    void OnEndReadingLips()
+    private void OnEndReadingLips()
     {
         animator.SetTrigger("Normal");
+    }
+
+    private void LoseGame()
+    {
+        animator.SetTrigger("Normal");
+        readLips.OnStartReadingLips = null;
+        readLips.OnEndReadingLips = null;
     }
 }

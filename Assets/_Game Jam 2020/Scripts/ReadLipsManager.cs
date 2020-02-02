@@ -8,9 +8,9 @@ public class ReadLipsManager : MonoBehaviour
     public float AwkwardMax = 100;
     public float AwkwardGainSpeed = 5;
     public float AwkwardLoseSpeed = 1.5f;
-    public UnityEvent OnStartReadingLips;
-    public UnityEvent OnEndReadingLips;
-    public UnityEvent OnAwkwardMax;
+    public UnityAction OnStartReadingLips;
+    public UnityAction OnEndReadingLips;
+    public UnityAction OnAwkwardMax;
 
     private void Update()
     {

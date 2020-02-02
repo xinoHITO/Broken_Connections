@@ -46,4 +46,4 @@ MonoBehaviour:
   AwkwardLevel: 0
   AwkwardMax: 100
   AwkwardGainSpeed: 33.333332
-  AwkwardLoseSpeed: 10
+  AwkwardLoseSpeed: 12.5
