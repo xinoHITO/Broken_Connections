@@ -48,6 +48,13 @@ MonoBehaviour:
   QuestionBox: {fileID: 0}
   QuestionLabel: {fileID: 0}
   AnswerLabelsContainer: {fileID: 0}
+  ResultBox: {fileID: 0}
+  RightAnswer: {fileID: 0}
+  WrongAnswer: {fileID: 0}
   Dialogue: {fileID: 11400000, guid: 33a357975943a8d4aabef0a12b00e42a, type: 2}
   SpeakRate: 0.08
   PauseBetweenLines: 2
+  BlinkDuration: 0.1
+  OnFinishedDialogue:
+    m_PersistentCalls:
+      m_Calls: []

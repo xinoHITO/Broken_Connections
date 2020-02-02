@@ -24,7 +24,7 @@ public class DialogueManager : MonoBehaviour
     public float SpeakRate = 0.1f;
     public float PauseBetweenLines = 2.0f;
 
-    public float BlinkDuration = 0.2f;
+    public float BlinkRate = 0.1f;
 
     private DistortionManager Distortion;
     private ReadLipsManager ReadLips;
@@ -46,6 +46,8 @@ public class DialogueManager : MonoBehaviour
 
     public UnityEvent OnFinishedDialogue;
 
+    private Button[] answerButtons;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,6 +58,8 @@ public class DialogueManager : MonoBehaviour
         ReadLips = FindObjectOfType<ReadLipsManager>();
         ReadLips.OnAwkwardMax += OnAwkwardReachesMax;
         textAudioSource = GetComponent<AudioSource>();
+
+        answerButtons = AnswerLabelsContainer.GetComponentsInChildren<Button>();
 
         StartCoroutine(ShowDialogueLines());
 
@@ -139,7 +143,6 @@ public class DialogueManager : MonoBehaviour
         HasBlinkingStarted = true;
         BlinkingStartIndex = CurrentUnalteredLine.Length;
         StartCoroutine(ChangeBlinkColor());
-        Debug.Log("blinking start");
     }
 
     private void BlinkingFinishes()
@@ -147,7 +150,6 @@ public class DialogueManager : MonoBehaviour
         HasBlinkingStarted = false;
         IsBlinkCurrentlyWhite = true;
         BlinkingStartIndex = -1;
-        Debug.Log("blinking end");
     }
 
     private IEnumerator ChangeBlinkColor()
@@ -155,13 +157,13 @@ public class DialogueManager : MonoBehaviour
         while (true)
         {
             IsBlinkCurrentlyWhite = false;
-            yield return new WaitForSeconds(BlinkDuration);
+            yield return new WaitForSeconds(BlinkRate);
             IsBlinkCurrentlyWhite = true;
             if (!HasBlinkingStarted)
             {
                 break;
             }
-            yield return new WaitForSeconds(BlinkDuration);
+            yield return new WaitForSeconds(BlinkRate);
         }
     }
 
@@ -200,12 +202,16 @@ public class DialogueManager : MonoBehaviour
 
         DialogueData.Question currentQuestion = Dialogue.dialogues[DialogueIndex].question;
         QuestionLabel.text = currentQuestion.text;
-        Text[] answerTexts = AnswerLabelsContainer.GetComponentsInChildren<Text>();
-        Button[] answerButtons = AnswerLabelsContainer.GetComponentsInChildren<Button>();
-        for (int i = 0; i < answerTexts.Length; i++)
+        foreach (Button button in answerButtons)
         {
-            answerTexts[i].text = currentQuestion.anwers[i];
+            button.gameObject.SetActive(false);
+        }
+        for (int i = 0; i < currentQuestion.anwers.Length; i++)
+        {
+            Text answerButtonText = answerButtons[i].GetComponentInChildren<Text>();
+            answerButtonText.text = currentQuestion.anwers[i];
             answerButtons[i].onClick.RemoveAllListeners();
+            answerButtons[i].gameObject.SetActive(true);
             if (i != currentQuestion.correctAnswerIndex)
             {
                 answerButtons[i].onClick.AddListener(() => OnClickWrongAnswer());

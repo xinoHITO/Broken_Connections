@@ -20,9 +20,8 @@ MonoBehaviour:
     question:
       text: SAY MY NAME
       anwers:
-      - "\xA1Me alegro por tu hermana y por su perrito "
-      - 'No hay problema, debes ir a ver a tu hermana ahora. '
-      - 
+      - "\xA1Me alegro por tu hermana y por su perrito!"
+      - No hay problema, debes ir a ver a tu hermana ahora.
       correctAnswerIndex: 1
   - lines:
     - "Lo llevaron con su veterinario apenas lo encontraron, si se pod\xEDa haber
