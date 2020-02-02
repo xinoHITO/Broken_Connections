@@ -14,23 +14,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogues:
   - lines:
-    - Hola soy la Wachi. Como estas?
-    - Me gusta mucho el ceviche
-    - UNDERTALE ROOOOOOOOOOOCKS
+    - "\xA1Hola Alysa! Gracias por esperarme, no podr\xE9 quedarme mucho tiempo."
+    - "Ver\xE1s, mi hermana est\xE1 muy mal porque su perrito acaba de morir. "
+    - 'Me acabo de enterar justo antes de bajarme del transporte. '
     question:
       text: SAY MY NAME
       anwers:
-      - La wachi
-      - Graciela
-      - Hitoshi
-      correctAnswerIndex: 0
+      - "\xA1Me alegro por tu hermana y por su perrito "
+      - 'No hay problema, debes ir a ver a tu hermana ahora. '
+      - 
+      correctAnswerIndex: 1
   - lines:
-    - Me gusta el anime
-    - Algunos dicen que soy otaca
+    - "Lo llevaron con su veterinario apenas lo encontraron, si se pod\xEDa haber
+      hecho algo... "
+    - "Pero ya era demasiado tarde para \xE9l. "
+    - "Mi hermana est\xE1 destrozada, no puede creer lo que le pas\xF3 al perrito "
     question:
       text: "\xBFQu\xE9 opinas?"
       anwers:
-      - Es delicioso
-      - Yo tambien soy animada
-      - No me gusta pero cada quien su gusto
-      correctAnswerIndex: 2
+      - "\xBFPor qu\xE9 no quisieron atenderlo? \xBFla veterinaria estaba cerrada? "
+      - "Si hay algo en lo que pueda ayudarte, d\xEDmelo por favor. "
+      - "\xBFQui\xE9n lleg\xF3 tarde? "
+      correctAnswerIndex: 1
+  - lines:
+    - Ya me tengo que ir. Estoy muy preocupada por mi hermana. Quiero llegar pronto
+      para apoyarla.
+    - De acuerdo, nos podremos ver en cualquier otro momento, luego de que todo esto
+      haya pasado.
+    - "S\xED. Te escribir\xE9 apenas pueda para mantenerte al tanto, o si surge algo
+      m\xE1s."
+    question:
+      text: "\xBFQu\xE9 opinas?"
+      anwers:
+      - 'Nos vemos. Saluda a tu hermana de mi parte. '
+      - "\xBFEn serio? Tu hermana no era tan buena persona al final. "
+      - 'Habla con tu hermana ahora mismo, por favor. '
+      correctAnswerIndex: 0

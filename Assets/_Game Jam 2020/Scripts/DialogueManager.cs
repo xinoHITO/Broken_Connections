@@ -21,7 +21,6 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Data")]
     public DialogueData Dialogue;
-    public AudioClip textAudioClip;
     public float SpeakRate = 0.1f;
     public float PauseBetweenLines = 2.0f;
 
@@ -51,8 +50,8 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         Distortion = FindObjectOfType<DistortionManager>();
-        Distortion.OnWarningStarted += BlinkingStarts;
-        Distortion.OnWarningFinished += BlinkingFinishes;
+        Distortion.OnWarningStarted.AddListener(BlinkingStarts);
+        Distortion.OnWarningFinished.AddListener(BlinkingFinishes);
 
         ReadLips = FindObjectOfType<ReadLipsManager>();
         ReadLips.OnAwkwardMax += OnAwkwardReachesMax;
