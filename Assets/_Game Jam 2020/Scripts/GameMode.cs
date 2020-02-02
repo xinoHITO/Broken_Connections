@@ -5,30 +5,26 @@ using UnityEngine.SceneManagement;
 
 public class GameMode : MonoBehaviour
 {
-    public GameObject MainCanvas;
-    public GameObject LoseCanvas;
-
-    public float WaitBeforeGoingToLoseScene = 5.0f;
-    public string LoseScene = "lose";
+    public float WaitBeforeGoingToEndingScene = 5.0f;
+    public string EndingScene = "ending";
     private ReadLipsManager readLips;
-
+    private DialogueManager dialogueManager;
 
     // Start is called before the first frame update
     void Start()
     {
         readLips = FindObjectOfType<ReadLipsManager>();
-        readLips.OnAwkwardMax += LoseGame;
+        readLips.OnAwkwardMax += EndGame;
+
     }
 
-    void LoseGame()
+    void EndGame()
     {
-        MainCanvas.SetActive(false);
-        LoseCanvas.SetActive(true);
         StartCoroutine(GoToLoseScene());
     }
 
     IEnumerator GoToLoseScene() {
-        yield return new WaitForSeconds(WaitBeforeGoingToLoseScene);
-        SceneManager.LoadScene(LoseScene);
+        yield return new WaitForSeconds(WaitBeforeGoingToEndingScene);
+        SceneManager.LoadScene(EndingScene);
     }
 }

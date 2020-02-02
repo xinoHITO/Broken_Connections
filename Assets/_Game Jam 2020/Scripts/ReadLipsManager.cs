@@ -14,7 +14,11 @@ public class ReadLipsManager : MonoBehaviour
 
     private void Update()
     {
-        IsReadingLips = Input.GetMouseButton(0);
+        bool clicked = Input.GetMouseButtonDown(0);
+        if (clicked)
+        {
+            IsReadingLips = !IsReadingLips;
+        }
         if (IsReadingLips)
         {
             AwkwardLevel += Time.deltaTime * AwkwardGainSpeed;
@@ -31,15 +35,16 @@ public class ReadLipsManager : MonoBehaviour
             OnEndReadingLips?.Invoke();
         }
 
-
-        if (Input.GetMouseButtonDown(0))
+        if (clicked)
         {
-            OnStartReadingLips?.Invoke();
+            if (IsReadingLips)
+            {
+                OnStartReadingLips?.Invoke();
+            }
+            else {
+                OnEndReadingLips?.Invoke();
+            }
         }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            OnEndReadingLips?.Invoke();
-        }
+        
     }
 }

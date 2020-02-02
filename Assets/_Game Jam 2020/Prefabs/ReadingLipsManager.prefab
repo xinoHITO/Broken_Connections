@@ -45,5 +45,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AwkwardLevel: 0
   AwkwardMax: 100
-  AwkwardGainSpeed: 33.333332
+  AwkwardGainSpeed: 25
   AwkwardLoseSpeed: 12.5
+  OnStartReadingLips:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndReadingLips:
+    m_PersistentCalls:
+      m_Calls: []

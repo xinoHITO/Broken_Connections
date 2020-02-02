@@ -8,13 +8,21 @@ public class GoToLevel : MonoBehaviour
     public string level = "gameplay";
     public float delay = 2;
 
-    // Start is called before the first frame update
-    void Start()
+    public bool activateAtStart = false;
+
+    private void Start()
     {
-        StartCoroutine(ChangeLevel());
+        if (activateAtStart)
+        {
+            ChangeLevel();
+        }
+    }
+    public void ChangeLevel()
+    {
+        StartCoroutine(ChangeLevelCoroutine());
     }
 
-    IEnumerator ChangeLevel()
+    IEnumerator ChangeLevelCoroutine()
     {
         yield return new WaitForSeconds(delay);
         SceneManager.LoadScene(level);

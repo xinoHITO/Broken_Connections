@@ -44,8 +44,10 @@ public class DialogueManager : MonoBehaviour
     public UnityAction OnRightAnswer;
     public UnityAction OnWrongAnswer;
 
+    public UnityAction OnLineStarted;
     public UnityAction OnLineFinished;
     public UnityEvent OnDialogueFinished;
+    public UnityEvent OnDialogueStarted;
 
     public delegate void OnAllDialoguesFinished(int correctAnswers, int questionsCount);
     public OnAllDialoguesFinished onAllDialoguesFinished;
@@ -90,7 +92,9 @@ public class DialogueManager : MonoBehaviour
         LineLabel.text = "";
         CurrentUnalteredLine = "";
         CurrentLine = "";
-
+        OnDialogueStarted?.Invoke();
+        Debug.Log("on dialogue started");
+        OnLineStarted?.Invoke();
         DialogueData.Dialogue currentDialogue = Dialogue.dialogues[DialogueIndex];
         Distortion.ApplyDistortion(currentDialogue.lines[LineIndex].Length * SpeakRate);
         textAudioSource.Play();
@@ -118,7 +122,6 @@ public class DialogueManager : MonoBehaviour
             if (LetterIndex == currentDialogue.lines[LineIndex].Length)
             {
 
-                BlinkingFinishes();
                 textAudioSource.Stop();
                 OnLineFinished?.Invoke();
                 yield return new WaitForSeconds(PauseBetweenLines);
@@ -128,6 +131,7 @@ public class DialogueManager : MonoBehaviour
                 {
                     break;
                 }
+                OnLineStarted?.Invoke();
                 CurrentUnalteredLine = "";
                 CurrentLine = "";
                 LineLabel.text = "";
@@ -137,6 +141,8 @@ public class DialogueManager : MonoBehaviour
 
             }
         }
+        OnDialogueFinished?.Invoke();
+        Debug.Log("On dialogue finished");
         ShowQuestion();
     }
 
@@ -154,6 +160,7 @@ public class DialogueManager : MonoBehaviour
         HasBlinkingStarted = false;
         IsBlinkCurrentlyWhite = true;
         BlinkingStartIndex = -1;
+        CurrentLine = CurrentUnalteredLine;
     }
 
     private IEnumerator ChangeBlinkColor()

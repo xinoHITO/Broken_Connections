@@ -11,11 +11,11 @@ public class PostProcessManager : MonoBehaviour
     private float OriginValue;
     private float TargetValue;
     private float CurrentAlpha;
-
+    
     // Start is called before the first frame update
     void Start()
     {
-        volume = GetComponent<Volume>();   
+        volume = GetComponent<Volume>();
     }
 
     // Update is called once per frame

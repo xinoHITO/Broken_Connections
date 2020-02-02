@@ -36,7 +36,7 @@ public class DistortionManager : MonoBehaviour
     {
         float distDuration = Random.Range(DistortionTimeMin, dialogueLineDuration - WarningDuration);
         distDuration = Mathf.Min(DistortionTimeMax, distDuration);
-        float delayBefore = dialogueLineDuration - WarningDuration - distDuration;
+        float delayBefore = Random.Range(0,dialogueLineDuration - WarningDuration - distDuration);
 
         yield return new WaitForSeconds(delayBefore);
         OnWarningStarted?.Invoke();

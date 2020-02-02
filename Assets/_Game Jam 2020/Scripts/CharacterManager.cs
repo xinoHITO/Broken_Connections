@@ -14,6 +14,7 @@ public class CharacterManager : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         dialogueManager = FindObjectOfType<DialogueManager>();
+        dialogueManager.OnLineStarted += OnLineStarted;
         dialogueManager.OnLineFinished+= OnFinishedLine;
         dialogueManager.OnRightAnswer += OnRightAnswer;
         dialogueManager.OnWrongAnswer += OnWrongAnswer;
@@ -27,20 +28,24 @@ public class CharacterManager : MonoBehaviour
         animator.SetTrigger("Angry");
     }
 
+    private void OnLineStarted()
+    {
+        animator.SetTrigger("Talk");
+    }
+
     private void OnFinishedLine()
     {
-        Debug.Log("on finished line");
         animator.SetTrigger("Idle");
     }
 
     private void OnWrongAnswer()
     {
-        animator.SetTrigger("Talk");
+        animator.SetTrigger("Angry");
     }
 
     private void OnRightAnswer()
     {
-        animator.SetTrigger("Talk");
+        animator.SetTrigger("Idle");
     }
 
 }
