@@ -58,19 +58,6 @@ public class DialogueManager : MonoBehaviour
         LineLabel.text = CurrentLine;
     }
 
-    //IEnumerator ShowDialogue()
-    //{
-    //    DialogueData.Dialogue currentDialogue = Dialogue.dialogues[DialogueIndex];
-    //    for (int i = 0; i < currentDialogue.lines.Length; i++)
-    //    {
-    //        string currentDialogueLine = currentDialogue.lines[i];
-    //        for (int j = 0; j < currentDialogueLine.Length; j++)
-    //        {
-    //            StartCoroutine(TEST(currentDialogueLine.Length*SpeakRate));
-    //        }
-    //    }
-    //}
-
     IEnumerator ShowDialogueLines()
     {
         QuestionBox.SetActive(false);
@@ -81,10 +68,12 @@ public class DialogueManager : MonoBehaviour
         CurrentUnalteredLine = "";
         CurrentLine = "";
 
+        DialogueData.Dialogue currentDialogue = Dialogue.dialogues[DialogueIndex];
+        Distortion.ApplyDistortion(currentDialogue.lines[LineIndex].Length * SpeakRate);
+
         while (true)
         {
             yield return new WaitForSeconds(SpeakRate);
-            DialogueData.Dialogue currentDialogue = Dialogue.dialogues[DialogueIndex];
 
             string newLetter = "" + currentDialogue.lines[LineIndex][LetterIndex];
             CurrentUnalteredLine += newLetter;
@@ -139,8 +128,8 @@ public class DialogueManager : MonoBehaviour
     private void BlinkingFinishes()
     {
         HasBlinkingStarted = false;
+        IsBlinkCurrentlyWhite = true;
         BlinkingStartIndex = -1;
-        //     CurrentLine = CurrentUnalteredLine;
         Debug.Log("blinking end");
     }
 

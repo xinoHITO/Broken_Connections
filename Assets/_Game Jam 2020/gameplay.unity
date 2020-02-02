@@ -1858,12 +1858,12 @@ PrefabInstance:
     - target: {fileID: 5068834178209217476, guid: 818e7f599c0bee840896f449d2fd487c,
         type: 3}
       propertyPath: OnQuestionFinished.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5068834178209217476, guid: 818e7f599c0bee840896f449d2fd487c,
         type: 3}
       propertyPath: OnDialogueFinished.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5068834178209217476, guid: 818e7f599c0bee840896f449d2fd487c,
         type: 3}
@@ -2043,7 +2043,7 @@ PrefabInstance:
     - target: {fileID: 5068834178209217476, guid: 818e7f599c0bee840896f449d2fd487c,
         type: 3}
       propertyPath: OnQuestionFinished.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5068834178209217477, guid: 818e7f599c0bee840896f449d2fd487c,
         type: 3}
