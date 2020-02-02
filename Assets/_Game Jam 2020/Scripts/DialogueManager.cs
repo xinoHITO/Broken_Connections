@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
@@ -38,6 +39,8 @@ public class DialogueManager : MonoBehaviour
     private int BlinkingStartIndex;
     private bool IsBlinkCurrentlyWhite;
 
+    public UnityEvent OnDialogueFinished;
+    public UnityEvent OnQuestionFinished;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,6 +58,18 @@ public class DialogueManager : MonoBehaviour
         LineLabel.text = CurrentLine;
     }
 
+    //IEnumerator ShowDialogue()
+    //{
+    //    DialogueData.Dialogue currentDialogue = Dialogue.dialogues[DialogueIndex];
+    //    for (int i = 0; i < currentDialogue.lines.Length; i++)
+    //    {
+    //        string currentDialogueLine = currentDialogue.lines[i];
+    //        for (int j = 0; j < currentDialogueLine.Length; j++)
+    //        {
+    //            StartCoroutine(TEST(currentDialogueLine.Length*SpeakRate));
+    //        }
+    //    }
+    //}
 
     IEnumerator ShowDialogueLines()
     {
@@ -64,31 +79,33 @@ public class DialogueManager : MonoBehaviour
         LineIndex = 0;
         LineLabel.text = "";
         CurrentUnalteredLine = "";
+        CurrentLine = "";
+
         while (true)
         {
             yield return new WaitForSeconds(SpeakRate);
             DialogueData.Dialogue currentDialogue = Dialogue.dialogues[DialogueIndex];
+
             string newLetter = "" + currentDialogue.lines[LineIndex][LetterIndex];
             CurrentUnalteredLine += newLetter;
 
-            if (!HasBlinkingStarted)
+            if (Distortion.IsDistortionActive && newLetter != " ")
             {
-                if (Distortion.IsDistortionActive && newLetter != " ")
+                if (ReadLips.IsReadingLips)
                 {
-                    if (ReadLips.IsReadingLips)
-                    {
-                        newLetter = "<color=red>" + newLetter + "</color>";
-                    }
-                    else
-                    {
-                        newLetter = "*";
-                    }
+                    newLetter = "<color=red>" + newLetter + "</color>";
                 }
-                CurrentLine += newLetter;
+                else
+                {
+                    newLetter = "*";
+                }
             }
+            CurrentLine += newLetter;
             LetterIndex++;
             if (LetterIndex == currentDialogue.lines[LineIndex].Length)
             {
+
+                BlinkingFinishes();
                 yield return new WaitForSeconds(PauseBetweenLines);
 
                 LineIndex++;
@@ -96,10 +113,16 @@ public class DialogueManager : MonoBehaviour
                 {
                     break;
                 }
+                CurrentUnalteredLine = "";
+                CurrentLine = "";
                 LineLabel.text = "";
                 LetterIndex = 0;
+
+                Distortion.ApplyDistortion(currentDialogue.lines[LineIndex].Length * SpeakRate);
+
             }
         }
+        OnDialogueFinished?.Invoke();
         ShowQuestion();
     }
 
@@ -110,15 +133,15 @@ public class DialogueManager : MonoBehaviour
         HasBlinkingStarted = true;
         BlinkingStartIndex = CurrentUnalteredLine.Length;
         StartCoroutine(ChangeBlinkColor());
-        Debug.Log("blinking start index:" + BlinkingStartIndex + " - "+CurrentUnalteredLine);
+        Debug.Log("blinking start");
     }
 
     private void BlinkingFinishes()
     {
         HasBlinkingStarted = false;
         BlinkingStartIndex = -1;
-        CurrentLine = CurrentUnalteredLine;
-        Debug.Log("blinking end index");
+        //     CurrentLine = CurrentUnalteredLine;
+        Debug.Log("blinking end");
     }
 
     private IEnumerator ChangeBlinkColor()
@@ -136,7 +159,8 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    private void ApplyBlinkingToText() {
+    private void ApplyBlinkingToText()
+    {
         if (HasBlinkingStarted)
         {
             string nonBlinkingPart = CurrentUnalteredLine.Substring(0, BlinkingStartIndex);
@@ -158,7 +182,7 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
-    
+
     #endregion
 
     #region QUESTION_FUNCTIONS
@@ -221,9 +245,10 @@ public class DialogueManager : MonoBehaviour
             ResultBox.SetActive(false);
             StartCoroutine(ShowDialogueLines());
         }
+        OnQuestionFinished?.Invoke();
         yield return null;
 
     }
- 
+
     #endregion
 }

@@ -12,25 +12,33 @@ public class DistortionManager : MonoBehaviour
 
     public UnityAction OnWarningStarted;
     public UnityAction OnWarningFinished;
-    // Start is called before the first frame update
-    void Start()
+
+
+    private void OnDisable()
     {
-        StartCoroutine(ApplyDistortion());
-    }
-
-    IEnumerator ApplyDistortion() {
-
-        while (true)
+        if (IsDistortionActive)
         {
-            yield return new WaitForSeconds(Random.Range(DistortionTimeMin, DistortionTimeMax));
-
-            OnWarningStarted?.Invoke();
-            yield return new WaitForSeconds(WarningDuration);
             OnWarningFinished?.Invoke();
-            IsDistortionActive = true;
-            yield return new WaitForSeconds(Random.Range(DistortionTimeMin, DistortionTimeMax));
             IsDistortionActive = false;
-            yield return new WaitForSeconds(Random.Range(DistortionTimeMin, DistortionTimeMax));
         }
+        StopAllCoroutines();
     }
+
+    public void ApplyDistortion(float dialogueLineDuration = 1) {
+        StartCoroutine(ApplyDistortionCoroutine(dialogueLineDuration));
+    }
+
+    IEnumerator ApplyDistortionCoroutine(float dialogueLineDuration) {
+
+        Debug.Log("APPLY DISTORTION");
+        OnWarningStarted?.Invoke();
+        yield return new WaitForSeconds(WarningDuration);
+        OnWarningFinished?.Invoke();
+        IsDistortionActive = true;
+        float distortionDuration = (dialogueLineDuration - WarningDuration) * Random.Range(0.0f, 1.0f);
+        Debug.Log(distortionDuration);
+        yield return new WaitForSeconds(distortionDuration);
+        IsDistortionActive = false;
+    }
+
 }

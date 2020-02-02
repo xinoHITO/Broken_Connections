@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogues:
   - lines:
-    - Hola soy la Wachi. Como estas?asrgargargasrgasrgasrgasrg
+    - Hola soy la Wachi. Como estas?
+    - Me gusta mucho el ceviche
+    - UNDERTALE ROOOOOOOOOOOCKS
     question:
       text: SAY MY NAME
       anwers:
