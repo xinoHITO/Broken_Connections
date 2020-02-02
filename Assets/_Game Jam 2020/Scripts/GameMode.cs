@@ -8,7 +8,7 @@ public class GameMode : MonoBehaviour
     public GameObject MainCanvas;
     public GameObject LoseCanvas;
 
-    public float WaitBeforeGoingToLoseScene = 2.0f;
+    public float WaitBeforeGoingToLoseScene = 5.0f;
     public string LoseScene = "lose";
     private ReadLipsManager readLips;
 

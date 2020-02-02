@@ -21,6 +21,7 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Data")]
     public DialogueData Dialogue;
+    public AudioClip textAudioClip;
     public float SpeakRate = 0.1f;
     public float PauseBetweenLines = 2.0f;
 
@@ -39,8 +40,13 @@ public class DialogueManager : MonoBehaviour
     private int BlinkingStartIndex;
     private bool IsBlinkCurrentlyWhite;
 
-    public UnityEvent OnDialogueFinished;
-    public UnityEvent OnQuestionFinished;
+    private AudioSource textAudioSource;
+
+    public UnityAction OnRightAnswer;
+    public UnityAction OnWrongAnswer;
+
+    public UnityEvent OnFinishedDialogue;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,7 +55,17 @@ public class DialogueManager : MonoBehaviour
         Distortion.OnWarningFinished += BlinkingFinishes;
 
         ReadLips = FindObjectOfType<ReadLipsManager>();
+        ReadLips.OnAwkwardMax += OnAwkwardReachesMax;
+        textAudioSource = GetComponent<AudioSource>();
+
         StartCoroutine(ShowDialogueLines());
+
+    }
+
+    private void OnAwkwardReachesMax()
+    {
+        textAudioSource.Stop();
+        StopAllCoroutines();
     }
 
     private void Update()
@@ -70,9 +86,10 @@ public class DialogueManager : MonoBehaviour
 
         DialogueData.Dialogue currentDialogue = Dialogue.dialogues[DialogueIndex];
         Distortion.ApplyDistortion(currentDialogue.lines[LineIndex].Length * SpeakRate);
-
+        textAudioSource.Play();
         while (true)
         {
+            
             yield return new WaitForSeconds(SpeakRate);
 
             string newLetter = "" + currentDialogue.lines[LineIndex][LetterIndex];
@@ -95,6 +112,8 @@ public class DialogueManager : MonoBehaviour
             {
 
                 BlinkingFinishes();
+                textAudioSource.Stop();
+
                 yield return new WaitForSeconds(PauseBetweenLines);
 
                 LineIndex++;
@@ -106,12 +125,11 @@ public class DialogueManager : MonoBehaviour
                 CurrentLine = "";
                 LineLabel.text = "";
                 LetterIndex = 0;
-
+                textAudioSource.Play();
                 Distortion.ApplyDistortion(currentDialogue.lines[LineIndex].Length * SpeakRate);
 
             }
         }
-        OnDialogueFinished?.Invoke();
         ShowQuestion();
     }
 
@@ -162,7 +180,7 @@ public class DialogueManager : MonoBehaviour
                 }
                 else
                 {
-                    CurrentLine = nonBlinkingPart + "<color=black>" + blinkingPart + "</color>";
+                    CurrentLine = nonBlinkingPart + "<color=#405b90>" + blinkingPart + " </color>";
                 }
             }
             else
@@ -206,6 +224,7 @@ public class DialogueManager : MonoBehaviour
         Debug.Log("INCORRECT");
         WrongAnswer.SetActive(true);
         RightAnswer.SetActive(false);
+        OnWrongAnswer?.Invoke();
         StartCoroutine(EndQuestion());
     }
 
@@ -215,6 +234,7 @@ public class DialogueManager : MonoBehaviour
         CorrectAnwersCount++;
         RightAnswer.SetActive(true);
         WrongAnswer.SetActive(false);
+        OnRightAnswer?.Invoke();
         StartCoroutine(EndQuestion());
     }
 
@@ -231,10 +251,10 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
+            yield return new WaitForSeconds(PauseBetweenLines);
             ResultBox.SetActive(false);
             StartCoroutine(ShowDialogueLines());
         }
-        OnQuestionFinished?.Invoke();
         yield return null;
 
     }

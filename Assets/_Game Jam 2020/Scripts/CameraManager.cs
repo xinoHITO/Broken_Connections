@@ -13,8 +13,8 @@ public class CameraManager : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         readLips = FindObjectOfType<ReadLipsManager>();
-        readLips.OnStartReadingLips += OnStartReadingLips;
-        readLips.OnEndReadingLips += OnEndReadingLips;
+        readLips.OnStartReadingLips.AddListener(OnStartReadingLips);
+        readLips.OnEndReadingLips.AddListener(OnEndReadingLips);
         readLips.OnAwkwardMax += LoseGame;
     }
 
@@ -31,7 +31,7 @@ public class CameraManager : MonoBehaviour
     private void LoseGame()
     {
         animator.SetTrigger("Normal");
-        readLips.OnStartReadingLips = null;
-        readLips.OnEndReadingLips = null;
+        readLips.OnStartReadingLips.RemoveAllListeners();
+        readLips.OnEndReadingLips.RemoveAllListeners();
     }
 }

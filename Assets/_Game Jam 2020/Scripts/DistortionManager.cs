@@ -12,7 +12,6 @@ public class DistortionManager : MonoBehaviour
     public UnityAction OnWarningStarted;
     public UnityAction OnWarningFinished;
 
-
     private void OnDisable()
     {
         if (IsDistortionActive)
@@ -31,17 +30,18 @@ public class DistortionManager : MonoBehaviour
 
     IEnumerator ApplyDistortionCoroutine(float dialogueLineDuration)
     {
-        float delayBeforeWarning = Random.Range(0, dialogueLineDuration - WarningDuration);
-        yield return new WaitForSeconds(delayBeforeWarning);
+        float distDuration = Random.Range(DistortionTimeMin, dialogueLineDuration - WarningDuration);
+        float delayBefore = dialogueLineDuration - WarningDuration - distDuration;
+
+        yield return new WaitForSeconds(delayBefore);
         OnWarningStarted?.Invoke();
         yield return new WaitForSeconds(WarningDuration);
         OnWarningFinished?.Invoke();
         IsDistortionActive = true;
-        float randomValue = Random.Range(DistortionTimeMin, 1.0f);
-        float distortionDuration = (dialogueLineDuration - WarningDuration) * randomValue;
-        string msg = string.Format("% value:{0} - Distortion duration:{1}", randomValue, distortionDuration);
+        float randomValue = Random.Range(0.0f, 1.0f);
+        string msg = string.Format("% value:{0} - Distortion duration:{1}", randomValue, distDuration);
         Debug.Log(msg);
-        yield return new WaitForSeconds(distortionDuration);
+        yield return new WaitForSeconds(distDuration);
         IsDistortionActive = false;
     }
 
